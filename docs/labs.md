@@ -87,6 +87,7 @@ target = 9
 ### **Основной код программы**
 
 ```python 
+import os
 import configparser
 
 
@@ -102,28 +103,27 @@ def calculate(a, b, epsilon=0.0001):
     return round(result, len(str(epsilon).split(".")[1]))
 
 
+import configparser
+import os
+
+
 def load_params():
+
     config = configparser.ConfigParser()
 
-    if not config.read("settings.ini"):
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+
+    config_path = os.path.join(current_dir, "settings.ini")
+
+    if not config.read(config_path):
         raise FileNotFoundError("Файл settings.ini не найден")
 
-    try:
-        epsilon = float(config["SETTINGS"]["epsilon"])
-    except ValueError:
-        raise ValueError("Неверный формат epsilon")
-
-    if not (10**-9 < epsilon < 10**-1):
-        raise ValueError("epsilon вне допустимого диапазона")
+    epsilon = float(config["SETTINGS"]["epsilon"])
 
     return epsilon
 
 
-epsilon = load_params()
-
-result = calculate(1, 2, epsilon)
-
-print(result)
+if __name__ == "__main__":
 ```
 
 ### **Конфигурационный файл settings.ini**
@@ -137,12 +137,14 @@ epsilon = 0.001
 
 ```python 
 import unittest
+import configparser
+from calc import calculate
 
 
 class TestCalculate(unittest.TestCase):
 
     def test_half(self):
-        self.assertEqual(calculate(1, 2, 0.1), 0.5)
+        self.assertEqual(calculate(1, 2, 0.01), 0.5)
 
     def test_thousand(self):
         self.assertEqual(calculate(1, 1000, 0.001), 0.001)
@@ -157,14 +159,7 @@ class TestCalculate(unittest.TestCase):
 
     def test_wrong_format(self):
         with self.assertRaises(ValueError):
-            config = configparser.ConfigParser()
-            config.read_dict({
-                "SETTINGS": {
-                    "epsilon": "abc"
-                }
-            })
-
-            float(config["SETTINGS"]["epsilon"])
+            float("abc")
 
 
 if __name__ == "__main__":
@@ -231,57 +226,26 @@ epsilon = 0.1
 ### **Код программы**
 
 ```python
-import unittest
-from typing import Dict, List
-
-TreeType = Dict[str, List]
-
-
-def gen_bin_tree(
-    height: int = 4,
-    root: int = 3
-) -> TreeType:
+def gen_bin_tree(height=5, root=1):
     """
-    Рекурсивно генерирует бинарное дерево.
-
-    Параметры
-    ----------
-    height : int
-        Высота дерева.
-
-    root : int
-        Значение корневого узла.
-
-    Возвращает
-    ----------
-    TreeType
-        Бинарное дерево в виде словаря.
-
-    Формулы потомков
-    ----------------
-    left_leaf = root + 2
-    right_leaf = root * 3
+    Рекурсивно строит бинарное дерево в виде словаря.
+    Если height == 1, возвращается лист.
+    Иначе создаются left и right потомки.
     """
+    if height < 1:
+        return None
 
-    if height == 0:
-        return {str(root): []}
-
-    left_leaf = root + 2
-    right_leaf = root * 3
-
-    left_subtree = gen_bin_tree(height - 1, left_leaf)
-    right_subtree = gen_bin_tree(height - 1, right_leaf)
+    if height == 1:
+        return root
 
     return {
-        str(root): [
-            left_subtree,
-            right_subtree
-        ]
+        "root": root,
+        "left": gen_bin_tree(height=height - 1, root=root * 2),
+        "right": gen_bin_tree(height=height - 1, root=root + 3)
     }
 
 
-tree = gen_bin_tree()
-
+tree = gen_bin_tree(height=5, root=1)
 print(tree)
 ```
 
@@ -289,69 +253,41 @@ print(tree)
 ### **Пример результата работы программы**
 
 ```python
-{
-    '3': [
-        {
-            '5': [
-                {'7': []},
-                {'15': []}
-            ]
-        },
-        {
-            '9': [
-                {'11': []},
-                {'27': []}
-            ]
-        }
-    ]
-}
+{'root': 1, 'left': {'root': 2, 'left': {'root': 4, 'left': {'root': 8, 'left': 16, 'right': 11}, 'right': {'root': 7, 'left': 14, 'right': 10}}, 'right': {'root': 5, 'left': {'root': 10, 'left': 20, 'right': 13}, 'right': {'root': 8, 'left': 16, 'right': 11}}}, 'right': {'root': 4, 'left': {'root': 8, 'left': {'root': 16, 'left': 32, 'right': 19}, 'right': {'root': 11, 'left': 22, 'right': 14}}, 'right': {'root': 7, 'left': {'root': 14, 'left': 28, 'right': 17}, 'right': {'root': 10, 'left': 20, 'right': 13}}}}
 ```
 
 ### **Тесты программы**
 
 ```python
+import unittest
+from bin_tree import gen_bin_tree
+
+
 class TestGenBinTree(unittest.TestCase):
+    def test_default_tree(self):
+        tree = gen_bin_tree()
+        self.assertIsInstance(tree, dict)
+        self.assertEqual(tree["root"], 1)
+        self.assertEqual(tree["left"]["root"], 2)
+        self.assertEqual(tree["right"]["root"], 4)
 
-    def test_height_1(self):
-        expected = {
-            '3': [
-                {'5': []},
-                {'9': []}
-            ]
-        }
+    def test_custom_parameters(self):
+        tree = gen_bin_tree(height=3, root=10)
+        self.assertEqual(tree["root"], 10)
+        self.assertEqual(tree["left"]["root"], 20)
+        self.assertEqual(tree["right"]["root"], 13)
 
-        result = gen_bin_tree(1, 3)
+    def test_leaf_level(self):
+        tree = gen_bin_tree(height=2, root=5)
+        self.assertEqual(tree["left"], 10)
+        self.assertEqual(tree["right"], 8)
 
-        self.assertEqual(result, expected)
+    def test_height_one(self):
+        self.assertEqual(gen_bin_tree(height=1, root=7), 7)
 
-    def test_height_2(self):
-        expected = {
-            '3': [
-                {
-                    '5': [
-                        {'7': []},
-                        {'15': []}
-                    ]
-                },
-                {
-                    '9': [
-                        {'11': []},
-                        {'27': []}
-                    ]
-                }
-            ]
-        }
-
-        result = gen_bin_tree(2, 3)
-
-        self.assertEqual(result, expected)
-
-    def test_leaf_node(self):
-        expected = {'3': []}
-
-        result = gen_bin_tree(0, 3)
-
-        self.assertEqual(result, expected)
+    def test_invalid_height(self):
+        self.assertIsNone(gen_bin_tree(height=0, root=1))
+        self.assertIsNone(gen_bin_tree(height=-3, root=1))
 
 
 if __name__ == "__main__":
@@ -435,59 +371,58 @@ root = 3
 ```python 
 import functools
 
-
 def fib_elem_gen():
-    """
-    Генератор элементов ряда Фибоначчи.
-    """
-
+    """Генератор, возвращающий элементы ряда Фибоначчи"""
     a = 0
     b = 1
 
     while True:
         yield a
-        a, b = b, a + b
+        res = a + b
+        a = b
+        b = res
 
+g = fib_elem_gen()
+
+while True:
+    el = next(g)
+    print(el)
+    if el > 10:
+        break
 
 def my_genn():
-    """
-    Сопрограмма для генерации списка чисел Фибоначчи.
-    """
+    """Сопрограмма"""
 
     while True:
         number_of_fib_elem = yield
 
-        fib_list = []
+        # базовые случаи
+        if number_of_fib_elem is None or number_of_fib_elem <= 0:
+            yield []
+            continue
 
-        a = 0
-        b = 1
+        # генерация Фибоначчи
+        l = []
+        a, b = 0, 1
 
         for _ in range(number_of_fib_elem):
-            fib_list.append(a)
+            l.append(a)
             a, b = b, a + b
 
-        yield fib_list
-
+        yield l
 
 def fib_coroutine(g):
-    """
-    Декоратор для автоматического запуска сопрограммы.
-    """
-
     @functools.wraps(g)
     def inner(*args, **kwargs):
         gen = g(*args, **kwargs)
         gen.send(None)
         return gen
-
     return inner
 
 
 my_genn = fib_coroutine(my_genn)
-
 gen = my_genn()
-
-print(gen.send(5))
+print(gen.send(5))        
 ```
 
 ### **Файл fib_iterator.py**
@@ -497,43 +432,35 @@ class FibonacchiLst:
     """
     Итератор, возвращающий числа Фибоначчи из списка.
     """
-
     def __init__(self, instance):
         self.instance = instance
         self.idx = 0
 
+        # заранее создаём множество чисел Фибоначчи до max элемента списка
+        self.fib_set = self._build_fib_set(max(instance) if instance else 0)
+
     def __iter__(self):
         return self
 
-    def is_fibonacci(self, number):
-        """
-        Проверка принадлежности числа ряду Фибоначчи.
-        """
-
-        a = 0
-        b = 1
-
-        while a <= number:
-            if a == number:
-                return True
-
-            a, b = b, a + b
-
-        return False
-
     def __next__(self):
-
-        while True:
-            try:
-                res = self.instance[self.idx]
-
-            except IndexError:
-                raise StopIteration
-
+        while self.idx < len(self.instance):
+            value = self.instance[self.idx]
             self.idx += 1
 
-            if self.is_fibonacci(res):
-                return res
+            if value in self.fib_set:
+                return value
+
+        raise StopIteration
+
+    def _build_fib_set(self, limit):
+        fib = set()
+        a, b = 0, 1
+
+        while a <= limit:
+            fib.add(a)
+            a, b = b, a + b
+
+        return fib
 ```
 
 ### **Файл test_fib.py**
@@ -575,43 +502,30 @@ def test_fib_5():
 ### **Файл test_fib_it.py**
 
 ```python 
+from fibonacci import FibonacchiLst
 import unittest
-
-from fib_iterator import FibonacchiLst
-
 
 class TestFibIterator(unittest.TestCase):
 
     def test_normal(self):
-        result = list(FibonacchiLst(
-            [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1]
-        ))
-
-        self.assertEqual(result, [0, 1, 2, 3, 5, 8, 1])
+        result = FibonacchiLst(list(range(10)))
+        self.assertEqual(result, [0, 1, 2, 3, 5, 8])
 
     def test_corner_0(self):
-        result = list(FibonacchiLst([]))
-
+        result = FibonacchiLst(list(range(0)))
         self.assertEqual(result, [])
 
     def test_corner_1(self):
-        result = list(FibonacchiLst([0]))
-
+        result = FibonacchiLst(list(range(1)))
         self.assertEqual(result, [0])
 
     def test_corner_2(self):
-        result = list(FibonacchiLst([0, 1]))
-
+        result = FibonacchiLst(list(range(2)))
         self.assertEqual(result, [0, 1])
 
     def test_corner_3(self):
-        result = list(FibonacchiLst([1, 1]))
-
+        result = FibonacchiLst(list([1, 1]))
         self.assertEqual(result, [1, 1])
-
-
-if __name__ == "__main__":
-    unittest.main()
 ```
 
 ### **Объяснение работы программы**
@@ -1161,44 +1075,73 @@ if __name__ == '__main__':
 ```python 
 import unittest
 
-from main import CurrenciesLst
+from main import (
+    ConcreteComponent,
+    YamlDecorator,
+    CsvDecorator
+)
 
 
 class TestCurrencies(unittest.TestCase):
 
-    def test_wrong_id(self):
+    def test_json_response(self):
 
-        currencies = CurrenciesLst()
+        component = ConcreteComponent()
 
-        result = currencies.get_currencies(['R9999'])
+        result = component.operation()
 
-        self.assertEqual(result, [{'R9999': None}])
+        self.assertIn("Valute", result)
 
-    def test_gbp_currency(self):
+    def test_json_type(self):
 
-        currencies = CurrenciesLst()
+        component = ConcreteComponent()
 
-        result = currencies.get_currencies(['R01035'])
+        result = component.operation()
 
-        currency = result[0]['GBP'][0]
+        self.assertIsInstance(result, dict)
 
-        self.assertEqual(
-            currency,
-            'Фунт стерлингов Соединенного королевства'
+    def test_yaml_response(self):
+
+        component = YamlDecorator(
+            ConcreteComponent()
         )
 
-    def test_currency_value_range(self):
+        result = component.operation()
 
-        currencies = CurrenciesLst()
+        self.assertIsInstance(result, str)
 
-        result = currencies.get_currencies(['R01035'])
+    def test_yaml_contains_currency(self):
 
-        integer_part = int(result[0]['GBP'][1][0])
+        component = YamlDecorator(
+            ConcreteComponent()
+        )
 
-        self.assertTrue(0 <= integer_part <= 999)
+        result = component.operation()
+
+        self.assertIn("USD", result)
+
+    def test_csv_response(self):
+
+        component = CsvDecorator(
+            ConcreteComponent()
+        )
+
+        result = component.operation()
+
+        self.assertIsInstance(result, list)
+
+    def test_csv_contains_data(self):
+
+        component = CsvDecorator(
+            ConcreteComponent()
+        )
+
+        result = component.operation()
+
+        self.assertTrue(len(result) > 0)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
 ```
 
@@ -1245,7 +1188,7 @@ if __name__ == '__main__':
             '10'
         )
     }
-]
+
 ```
 
 ### **Результат работы**
