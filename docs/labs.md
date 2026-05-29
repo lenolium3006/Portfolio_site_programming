@@ -315,22 +315,7 @@ root = 3
 ### **Вывод программы**
 
 ```python
-{
-    '3': [
-        {
-            '5': [
-                {'7': []},
-                {'15': []}
-            ]
-        },
-        {
-            '9': [
-                {'11': []},
-                {'27': []}
-            ]
-        }
-    ]
-}
+{'root': 1, 'left': {'root': 2, 'left': {'root': 4, 'left': {'root': 8, 'left': 16, 'right': 11}, 'right': {'root': 7, 'left': 14, 'right': 10}}, 'right': {'root': 5, 'left': {'root': 10, 'left': 20, 'right': 13}, 'right': {'root': 8, 'left': 16, 'right': 11}}}, 'right': {'root': 4, 'left': {'root': 8, 'left': {'root': 16, 'left': 32, 'right': 19}, 'right': {'root': 11, 'left': 22, 'right': 14}}, 'right': {'root': 7, 'left': {'root': 14, 'left': 28, 'right': 17}, 'right': {'root': 10, 'left': 20, 'right': 13}}}}
 ```
 
 ### **Результат работы**

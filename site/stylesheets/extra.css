@@ -1,0 +1,409 @@
+:root {
+  --md-primary-fg-color: rgb(248, 168, 201);
+  --md-accent-fg-color: rgb(255, 115, 170);
+  --md-default-bg-color: #fff5fa;
+}
+
+body,
+.md-main {
+  background:
+    linear-gradient(
+      #ffeef5cc,
+      #ffeef5cc
+    ),
+    url("../images/2.jpg");
+}
+/* HEADER */
+
+.md-header {
+  background: rgb(255, 115, 170, 0.50);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 6px 24px rgba(255, 182, 193, 0.2);
+}
+
+/* NAVIGATION */
+
+.md-tabs {
+  background: rgb(255, 115, 170, 0.5);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 4px 20px rgba(255, 182, 193, 0.25);
+  padding: 0px 0px 0px 0px;
+}
+
+.md-tabs__link {
+  color: white !important;
+  font-weight: 600;
+  opacity: 0.95;
+  transition: all 0.3s ease;
+  padding: 12px 18px;
+  border-radius: 12px;
+  padding-top: 6px;
+  padding-bottom: 14px; /* больше воздуха снизу */
+  line-height: 1.4;
+  transform: translateY(-2px);
+}
+
+.md-tabs__link:hover {
+  background: rgba(255,255,255,0.15);
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+.md-tabs__link--active {
+  background: rgba(255,255,255,0.2);
+  color: white !important;
+}
+
+/* SEARCH */
+
+.md-search__form {
+  background: rgb(255, 115, 170, 0.4)
+  ;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(255, 115, 170, 0.25);
+}
+
+.md-search__input {
+  color: rgb(255, 115, 170) !important;
+}
+
+.md-search__input::placeholder {
+  color: rgba(255,255,255,0.8);
+}
+
+.md-search__icon {
+  color: white !important;
+}
+
+/* MAIN CONTENT */
+
+.md-main__inner {
+  margin-top: 40px;
+}
+
+.md-content {
+  padding: 20px;
+}
+
+.md-content__inner {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(18px);
+  border-radius: 30px;
+  padding: 50px;
+  box-shadow: 0 12px 40px rgba(255, 182, 193, 0.15);
+}
+
+/* HEADINGS */
+
+.md-typeset h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ff73aa;
+  margin-bottom: 30px;
+}
+
+.md-typeset h2 {
+  color: #ff8fb8;
+  margin-top: 50px;
+  margin-bottom: 20px;
+}
+
+.md-typeset p {
+  line-height: 1.9;
+  font-size: 1rem;
+}
+
+/* CARDS / BLOCKS */
+
+.md-typeset .admonition,
+.md-typeset details {
+  border-radius: 24px;
+  border: none;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(255, 182, 193, 0.15);
+  background: rgba(255,255,255,0.7);
+}
+
+/* IMAGES */
+
+img {
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* BUTTONS */
+
+.md-button {
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  padding: 8px  22px;
+  font-weight: 600;
+}
+
+.md-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(255, 115, 170, 0.3);
+}
+
+/* SIDEBAR */
+
+.md-sidebar {
+  padding-top: 20px;
+}
+
+.md-nav {
+  background: rgba(255,255,255,0.45);
+  backdrop-filter: blur(12px);
+  border-radius: 24px;
+  padding: 20px;
+}
+
+
+
+/* ОСТАВИТЬ ЛЕВУЮ НАВИГАЦИЮ */
+
+.md-sidebar--primary {
+  display:  none !important;
+}
+
+/* ПРАВИЛЬНЫЙ LAYOUT */
+
+@media screen and (min-width: 76.25em) {
+
+  .md-grid {
+    max-width: 95% !important;
+  }
+
+  .md-main__inner {
+    grid-template-columns:
+      minmax(260px, 320px)
+      1fr !important;
+
+    gap: 40px;
+  }
+
+  .md-content {
+    max-width: 100%;
+  }
+}
+
+/* ШИРИНА КОНТЕНТА */
+
+.md-content__inner {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ЧЕРНЫЕ ССЫЛКИ */
+
+.md-typeset a {
+  color: #000000 !important;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.md-typeset a:hover {
+  color: #ff73aa !important;
+}
+
+/* УБРАТЬ ОБВОДКУ И ТЕНИ У КАРТИНОК */
+
+.md-typeset img,
+img {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+
+/* ========================= */
+/* H2 ЗАГОЛОВКИ */
+/* ========================= */
+
+.md-typeset h2 {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #ff73aa;
+  margin-top: 60px;
+  margin-bottom: 25px;
+
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(255,115,170,0.2);
+}
+
+/* ========================= */
+/* ПРАВАЯ ПАНЕЛЬ CONTENTS */
+/* ========================= */
+
+.md-sidebar--secondary {
+  display: block !important;
+  padding-top: 20px;
+}
+
+/* КОНТЕЙНЕР */
+
+.md-sidebar--secondary .md-sidebar__scrollwrap {
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(18px);
+
+  border-radius: 28px;
+
+  padding: 22px;
+
+  box-shadow:
+    0 10px 30px rgba(255,182,193,0.15);
+
+  border: 1px solid rgba(255,255,255,0.4);
+}
+
+/* ЗАГОЛОВОК CONTENTS */
+
+.md-nav--secondary .md-nav__title {
+  color: #ff73aa;
+
+  font-size: 1rem;
+  font-weight: 800;
+
+  margin-bottom: 18px;
+
+  padding-left: 8px;
+}
+
+/* ССЫЛКИ */
+
+.md-nav--secondary .md-nav__link {
+  border-radius: 14px;
+
+  padding:
+    10px 14px;
+
+  margin-bottom: 8px;
+
+  transition: all 0.25s ease;
+
+  font-size: 0.95rem;
+
+  color: #444 !important;
+}
+
+/* HOVER */
+
+.md-nav--secondary .md-nav__link:hover {
+  background:
+    rgba(255,115,170,0.12);
+
+  color: #ff73aa !important;
+
+  transform:
+    translateX(4px);
+}
+
+/* ACTIVE */
+
+.md-nav--secondary .md-nav__link--active {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(248,168,201,0.25),
+      rgba(255,115,170,0.18)
+    );
+
+  color: #ff73aa !important;
+
+  font-weight: 700;
+}
+
+/* СКРОЛЛ */
+
+.md-sidebar__scrollwrap {
+  scrollbar-width: thin;
+}
+
+/* ========================= */
+/* CONTENT WIDTH */
+/* ========================= */
+
+@media screen and (min-width: 76.25em) {
+
+  .md-main__inner {
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      280px !important;
+
+    gap: 45px;
+  }
+
+  .md-content {
+    max-width: 100%;
+  }
+}
+
+/* ========================= */
+/* УМЕНЬШЕНИЕ ШРИФТОВ */
+/* ========================= */
+
+/* ОСНОВНОЙ ТЕКСТ */
+
+.md-typeset {
+  font-size: 0.9rem;
+}
+
+/* H1 */
+
+.md-typeset h1 {
+  font-size: 1.8rem;
+}
+
+/* H2 */
+
+.md-typeset h2 {
+  font-size: 1.35rem;
+}
+
+/* H3 */
+
+.md-typeset h3 {
+  font-size: 1.05rem;
+}
+
+/* ПАРАГРАФЫ */
+
+.md-typeset p,
+.md-typeset li {
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
+/* CODE */
+
+.md-typeset code {
+  font-size: 0.85rem;
+}
+
+/* БЛОКИ КОДА */
+
+.md-typeset pre code {
+  font-size: 0.82rem;
+}
+
+/* ПРАВАЯ ПАНЕЛЬ CONTENTS */
+
+.md-nav--secondary .md-nav__link {
+  font-size: 0.82rem;
+}
+
+/* ВЕРХНЕЕ МЕНЮ */
+
+.md-tabs__link {
+  font-size: 0.85rem;
+}
+
+/* SIDEBAR */
+
+.md-nav__link {
+  font-size: 0.9rem;
+}

@@ -88,6 +88,8 @@
 * контролировать изменения;
 * упростить совместную разработку.
 
+У меня была выбрана концепция - наследование
+
 ### **Наследование**
 
 В рамках командного проекта мной была выбрана тема «Наследование» в объектно-ориентированном программировании.
@@ -466,15 +468,14 @@ public class Main {
 
 ### **Ссылка на репозиторий**
 
-```text 
-https://github.com/Artomaniia/2ob_POO
-```
+[https://github.com/Artomaniia/2ob_POO](https://github.com/Artomaniia/2ob_POO)
+
 
 ### **Ссылка на итоговый файл README.md**
 
-```text
-https://github.com/Artomaniia/2ob_POO/blob/main/README.md
-```
+
+[https://github.com/Artomaniia/2ob_POO/blob/main/README.md](https://github.com/Artomaniia/2ob_POO/blob/main/README.md)
+
 
 ### **Результат работы**
 
